@@ -109,3 +109,24 @@ def homework(course_id):
         return redirect(url_for("mentor.courses"))
 
     return render_template("mentor/material_form.html", title="Edit Homework", material=hw.instructions)
+
+
+@material_bp.route("/quiz_builder", methods=["GET", "POST"])
+@login_required
+def quiz_builder(course_id):
+    course = check_course_owner(course_id)
+    if not course:
+        return redirect(url_for("main.index"))
+
+    quiz = course.quiz or CourseQuiz(course_id=course.id, questions="[]")
+
+    if request.method == "POST":
+        import json
+        quiz_json = request.form["quiz_json"]
+        quiz.questions = quiz_json
+        db.session.add(quiz)
+        db.session.commit()
+        flash("Quiz saved.")
+        return redirect(url_for("mentor.courses"))
+
+    return render_template("mentor/build_quiz.html", course=course)

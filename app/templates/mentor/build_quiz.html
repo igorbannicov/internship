@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Build Quiz{% endblock %}
+{% block content %}
+<h2>Create Quiz for {{ course.title }}</h2>
+<form id="quiz-form" method="post">
+  <div id="questions-container"></div>
+  <button type="button" class="btn btn-outline-secondary mt-3" onclick="addQuestion()">+ Add Question</button>
+  <hr>
+  <input type="hidden" name="quiz_json" id="quiz_json">
+  <button type="submit" class="btn btn-primary mt-3">Save Quiz</button>
+</form>
+
+<hr>
+<h4>Preview</h4>
+<div id="preview" class="border p-3 rounded bg-light"></div>
+
+<script>
+function renderPreview() {
+  const preview = document.getElementById("preview");
+  preview.innerHTML = "";
+
+  for (let i = 0; i < questionIndex; i++) {
+    const qText = document.querySelector(`[name='q${i}_text']`);
+    if (!qText) continue;
+
+    const questionEl = document.createElement("div");
+    questionEl.innerHTML = `<strong>${i + 1}. ${qText.value}</strong>`;
+    preview.appendChild(questionEl);
+
+    let j = 0;
+    while (true) {
+      const optInput = document.querySelector(`[name='q${i}_option_${j}']`);
+      if (!optInput) break;
+      const chk = document.querySelector(`[name='q${i}_correct_${j}']`);
+      const isCorrect = chk.checked;
+      const optDiv = document.createElement("div");
+      optDiv.innerHTML = `&nbsp;&nbsp;- ${optInput.value}` + (isCorrect ? " ✅" : "");
+      preview.appendChild(optDiv);
+      j++;
+    }
+
+    preview.appendChild(document.createElement("hr"));
+  }
+}
+
+document.getElementById("quiz-form").addEventListener("input", renderPreview);
+</script>
+
+
+<script>
+let questionIndex = 0;
+
+function addQuestion() {
+  const container = document.getElementById("questions-container");
+
+  const qDiv = document.createElement("div");
+  qDiv.classList.add("mb-4");
+  qDiv.classList.add('question-block');
+  qDiv.innerHTML = `
+    <label><strong>Question</strong></label>
+    <input type="text" class="form-control mb-2" name="q${questionIndex}_text" required>
+    <div id="q${questionIndex}_options"></div>
+    <button type="button" class="btn btn-sm btn-outline-info" onclick="addOption(${questionIndex})">+ Add Option</button>
+    <hr>
+  `;
+  container.appendChild(qDiv);
+  questionIndex++;
+}
+
+function addOption(qIndex) {
+  const optContainer = document.getElementById(`q${qIndex}_options`);
+  const optIndex = optContainer.children.length;
+  const optDiv = document.createElement("div");
+  optDiv.classList.add("input-group", "mb-1");
+  optDiv.innerHTML = `
+    <div class="input-group-text">
+      <input type="checkbox" name="q${qIndex}_correct_${optIndex}">
+    </div>
+    <input type="text" class="form-control" name="q${qIndex}_option_${optIndex}" required>
+  `;
+  optContainer.appendChild(optDiv);
+}
+
+document.getElementById("quiz-form").addEventListener("submit", function(e) {
+  const questions = [];
+  for (let i = 0; i < questionIndex; i++) {
+    const qText = document.querySelector(`[name='q${i}_text']`).value;
+    const options = [];
+    const correct = [];
+    let j = 0;
+    while (true) {
+      const opt = document.querySelector(`[name='q${i}_option_${j}']`);
+      if (!opt) break;
+      const val = opt.value;
+      options.push(val);
+      const chk = document.querySelector(`[name='q${i}_correct_${j}']`);
+      if (chk.checked) correct.push(val);
+      j++;
+    }
+    questions.push({ question: qText, options: options, answer: correct });
+  }
+  document.getElementById("quiz_json").value = JSON.stringify(questions);
+});
+</script>
+{% endblock %}
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const existing = {{ course.quiz.questions | safe }};
+  if (!Array.isArray(existing)) return;
+
+  for (const [i, q] of existing.entries()) {
+    addQuestion();
+    document.querySelector(`[name='q${i}_text']`).value = q.question;
+
+    for (const [j, opt] of q.options.entries()) {
+      addOption(i);
+      document.querySelector(`[name='q${i}_option_${j}']`).value = opt;
+      if (q.answer.includes(opt)) {
+        document.querySelector(`[name='q${i}_correct_${j}']`).checked = true;
+      }
+    }
+  }
+
+  renderPreview();
+});
+</script>
