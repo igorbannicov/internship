@@ -1,19 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Quiz{% endblock %}
+{% block title %}{{ course.title }} — Quiz{% endblock %}
 {% block content %}
 <h2>{{ course.title }} — Quiz</h2>
-<form method="post">
-    {% for q in questions %}
-      <div class="mb-3">
-        <label><strong>{{ loop.index }}. {{ q.question }}</strong></label><br>
-        {% for option in q.options %}
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="q{{ loop.index0 }}" value="{{ option }}">
-            <label class="form-check-label">{{ option }}</label>
-          </div>
-        {% endfor %}
-      </div>
-    {% endfor %}
-  <button class="btn btn-success">Submit Answers</button>
+<form id="quiz-form">
+  {% for q in questions %}
+    <div class="mb-4 question-block" data-question="{{ q.question }}">
+      <label class="form-label"><strong>{{ loop.index }}. {{ q.question }}</strong></label>
+      {% for option in q.options %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="q{{ loop.index0 }}" value="{{ option }}">
+          <label class="form-check-label">{{ option }}</label>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  <button type="button" class="btn btn-success mt-3" onclick="submitQuiz()">Submit Answers</button>
 </form>
+
+<script>
+function submitQuiz() {
+  const quizData = [];
+  const blocks = document.querySelectorAll(".question-block");
+
+  blocks.forEach((block, index) => {
+    const question = block.dataset.question;
+    const selected = Array.from(block.querySelectorAll("input[type='checkbox']:checked")).map(i => i.value);
+    quizData.push({ question, selected });
+  });
+
+  fetch(location.href, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ answers: quizData })
+  })
+  .then(res => res.text())
+  .then(html => document.body.innerHTML = html)
+  .catch(err => alert("Error: " + err));
+}
+</script>
 {% endblock %}

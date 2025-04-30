@@ -57,28 +57,36 @@ def course_detail(course_id):
 @intern_bp.route("/course/<int:course_id>/quiz", methods=["GET", "POST"])
 @login_required
 def course_quiz(course_id):
+    from flask import jsonify
+    import json
+
     course = Course.query.get_or_404(course_id)
     if not current_user.is_intern():
-        flash("Access denied.")
-        return redirect(url_for("main.index"))
+        return "Access denied", 403
 
     progress = CourseProgress.query.filter_by(intern_id=current_user.id, course_id=course.id).first()
     if not progress or not progress.presentation_viewed:
-        flash("You must view the presentation first.")
-        return redirect(url_for("intern.course_detail", course_id=course.id))
+        return "You must view the presentation first.", 403
 
-    import json
     try:
         questions = json.loads(course.quiz.questions)
     except Exception:
-        flash("Quiz is not properly formatted.")
-        return redirect(url_for("intern.course_detail", course_id=course.id))
+        return "Quiz format error", 400
 
-    results = []
     if request.method == "POST":
+        data = request.get_json()
+        user_answers = data.get("answers", [])
+
         score = 0
-        for i, q in enumerate(questions):
-            selected = request.form.getlist(f"q{i}")
+        results = []
+        for user_answer in user_answers:
+            question_text = user_answer.get("question")
+            selected = user_answer.get("selected", [])
+
+            q = next((q for q in questions if q["question"] == question_text), None)
+            if not q:
+                continue
+
             correct = q["answer"]
             if isinstance(correct, str):
                 correct = [correct]
@@ -86,8 +94,9 @@ def course_quiz(course_id):
             is_correct = sorted(selected) == sorted(correct)
             if is_correct:
                 score += 1
+
             results.append({
-                "question": q["question"],
+                "question": question_text,
                 "selected": selected,
                 "correct": correct,
                 "is_correct": is_correct
@@ -98,5 +107,7 @@ def course_quiz(course_id):
         return render_template("intern/quiz_result.html", course=course, results=results, score=score, total=len(questions))
 
     return render_template("intern/quiz.html", course=course, questions=questions)
+
+
 
 
