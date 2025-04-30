@@ -1,7 +1,6 @@
 flask
 flask_sqlalchemy
+flask_migrate
 flask_login
 flask_bcrypt
-python-dotenv
-openpyxl
 psycopg2-binary
