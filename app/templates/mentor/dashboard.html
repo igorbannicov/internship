@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Course Dashboard{% endblock %}
+{% block content %}
+<h2>{{ course.title }} — Mentor Dashboard</h2>
+
+<h4 class="mt-4">Quiz Results</h4>
+<table class="table">
+  <thead><tr><th>Intern</th><th>Score</th><th>Out of</th><th>%</th></tr></thead>
+  <tbody>
+  {% for r in quiz_results %}
+    <tr>
+      <td>{{ r.intern.name }}</td>
+      <td>{{ r.score }}</td>
+      <td>{{ r.total }}</td>
+      <td>{{ "%.1f"|format((r.score/r.total)*100 if r.total else 0) }}%</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h4 class="mt-4">Homework Submissions</h4>
+<ul>
+  {% for p in progresses %}
+    <li>{{ p.intern.name }} — {{ "✅ Submitted" if p.homework_submitted else "❌ Not Submitted" }}</li>
+  {% endfor %}
+</ul>
+
+<h4 class="mt-4">Charts</h4>
+<canvas id="quizChart" height="150"></canvas>
+<canvas id="hwChart" height="150" class="mt-4"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx1 = document.getElementById('quizChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'bar',
+  data: {
+    labels: {{ quiz_labels|safe }},
+    datasets: [{
+      label: 'Quiz %',
+      data: {{ quiz_scores|safe }},
+      backgroundColor: 'rgba(54, 162, 235, 0.6)'
+    }]
+  }
+});
+
+const ctx2 = document.getElementById('hwChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'doughnut',
+  data: {
+    labels: ['Submitted', 'Not Submitted'],
+    datasets: [{
+      data: [{{ hw_submitted }}, {{ hw_not_submitted }}],
+      backgroundColor: ['#28a745', '#dc3545']
+    }]
+  }
+});
+</script>
+{% endblock %}

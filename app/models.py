@@ -69,3 +69,15 @@ class CourseProgress(db.Model):
 
     intern = db.relationship('User', backref='progress')
     course = db.relationship('Course', backref='progress')
+
+
+class QuizResult(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    intern_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    total = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.DateTime, server_default=db.func.now())
+
+    intern = db.relationship('User', backref='quiz_results')
+    course = db.relationship('Course', backref='quiz_results')

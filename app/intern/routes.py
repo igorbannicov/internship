@@ -59,6 +59,7 @@ def course_detail(course_id):
 def course_quiz(course_id):
     from flask import jsonify
     import json
+    from app.models import QuizResult
 
     course = Course.query.get_or_404(course_id)
     if not current_user.is_intern():
@@ -104,9 +105,15 @@ def course_quiz(course_id):
 
         progress.quiz_passed = True
         db.session.commit()
+
+        result = QuizResult(intern_id=current_user.id, course_id=course.id, score=score, total=len(questions))
+        db.session.add(result)
+        db.session.commit()
+
         return render_template("intern/quiz_result.html", course=course, results=results, score=score, total=len(questions))
 
     return render_template("intern/quiz.html", course=course, questions=questions)
+
 
 
 
