@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Create Course{% endblock %}
+{% block content %}
+<h2>Create Course</h2>
+<form method="post" enctype="multipart/form-data" class="row g-3">
+  <div class="col-12">
+    <label class="form-label">Title</label>
+    <input name="title" class="form-control" required>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Description</label>
+    <textarea name="description" class="form-control"></textarea>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Presentation Type</label>
+    <select name="presentation_format" class="form-select" required>
+      <option value="pdf">PDF Upload</option>
+      <option value="link">External Link</option>
+    </select>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Presentation URL (if link)</label>
+    <input name="presentation_url" class="form-control">
+  </div>
+  <div class="col-12">
+    <label class="form-label">Presentation PDF (if chosen)</label>
+    <input type="file" name="presentation_pdf" class="form-control" accept="application/pdf">
+  </div>
+  <div class="col-12">
+    <label class="form-label">Teaching Video</label>
+    <input name="video" type="file" class="form-control" accept="video/*">
+  </div>
+  <div class="col-12">
+    <label class="form-label">Notes</label>
+    <textarea name="notes" class="form-control"></textarea>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Quiz JSON</label>
+    <textarea name="quiz_data" class="form-control" rows="4" placeholder='[{"q": "Question?", "a": "Answer"}]'></textarea>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Homework Description</label>
+    <textarea name="homework_description" class="form-control"></textarea>
+  </div>
+  <div class="col-12 form-check">
+    <input type="checkbox" name="homework_upload_required" class="form-check-input">
+    <label class="form-check-label">Requires file upload</label>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Available From</label>
+    <input type="datetime-local" name="available_from" class="form-control" required>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Available Until</label>
+    <input type="datetime-local" name="available_until" class="form-control" required>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Create</button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Mentor Dashboard{% endblock %}
+{% block content %}
+<h2>My Courses</h2>
+<a href="{{ url_for('main.create_course') }}" class="btn btn-success mb-3">Create Course</a>
+<ul class="list-group">
+  {% for course in courses %}
+    <li class="list-group-item">
+      <strong>{{ course.title }}</strong> — {{ course.available_from }} to {{ course.available_until }}<br>
+      <a href="{{ url_for('main.course_report', course_id=course.id) }}" class="btn btn-sm btn-info mt-2">View Report</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
