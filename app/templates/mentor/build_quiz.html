@@ -102,9 +102,6 @@ document.getElementById("quiz-form").addEventListener("submit", function(e) {
   document.getElementById("quiz_json").value = JSON.stringify(questions);
 });
 </script>
-{% endblock %}
-
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const existing = {{ course.quiz.questions | safe }};
@@ -126,3 +123,4 @@ document.addEventListener("DOMContentLoaded", function () {
   renderPreview();
 });
 </script>
+{% endblock %}
