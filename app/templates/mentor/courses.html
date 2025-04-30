@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}My Courses{% endblock %}
+{% block content %}
+<h2>My Courses</h2>
+<a href="{{ url_for('mentor.create_course') }}" class="btn btn-success mb-3">+ Create Course</a>
+<table class="table">
+  <thead>
+    <tr><th>Title</th><th>Description</th><th>Created</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for course in courses %}
+    <tr>
+      <td>{{ course.title }}</td>
+      <td>{{ course.description or '' }}</td>
+      <td>{{ course.created_at.strftime('%Y-%m-%d') }}</td>
+    <th>Actions</th><td>
+        <a href="{{ url_for('material.presentation', course_id=course.id) }}">Presentation</a> |
+        <a href="{{ url_for('material.notes', course_id=course.id) }}">Notes</a> |
+        <a href="{{ url_for('material.quiz', course_id=course.id) }}">Quiz</a> |
+        <a href="{{ url_for('material.homework', course_id=course.id) }}">Homework</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Course Details{% endblock %}
+{% block content %}
+<h2>{{ course.title }}</h2>
+
+{% if course.presentation %}
+  <h4>Presentation</h4>
+  {% if not progress.presentation_viewed %}
+    <form method="post">
+      <input type="hidden" name="action" value="view_presentation">
+      <button class="btn btn-outline-primary">Mark as Viewed</button>
+    </form>
+  {% else %}
+    <iframe src="{{ url_for('static', filename='uploads/' + course.presentation.filename) }}"
+                width="100%" height="500px" class="border"></iframe>
+  {% endif %}
+{% endif %}
+
+{% if course.notes and progress.presentation_viewed %}
+  <h4 class="mt-4">Notes</h4>
+  <div class="border p-2">{{ course.notes.content }}</div>
+{% endif %}
+
+{% if course.quiz and progress.presentation_viewed %}
+  <h4 class="mt-4">Quiz</h4>
+  {% if not progress.quiz_passed %}
+    <a href="{{ url_for('intern.course_quiz', course_id=course.id) }}" class="btn btn-outline-success">Take Quiz</a>
+  {% else %}
+    <div class="alert alert-success">Quiz completed.</div>
+  {% endif %}
+{% endif %}
+
+{% if course.homework and progress.quiz_passed %}
+  <h4 class="mt-4">Homework</h4>
+  {% if not progress.homework_submitted %}
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="action" value="submit_homework">
+      <input type="file" name="homework_file" required>
+      <button class="btn btn-outline-secondary">Upload</button>
+    </form>
+  {% else %}
+    <p>Submitted: {{ progress.submission_filename }}</p>
+  {% endif %}
+{% endif %}
+
+<a href="{{ url_for('intern.courses') }}" class="btn btn-secondary mt-4">Back to Courses</a>
+{% endblock %}

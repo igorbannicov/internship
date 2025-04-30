@@ -40,10 +40,11 @@
         {% if current_user.is_admin() %}
           <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Register User</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.users') }}">User Management</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.all_courses') }}">Manage Courses</a></li>
         {% elif current_user.is_mentor() %}
-          <li class="nav-item"><a class="nav-link" href="#">My Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('mentor.courses') }}">My Courses</a></li>
         {% elif current_user.is_intern() %}
-          <li class="nav-item"><a class="nav-link" href="#">Available Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('intern.courses') }}">Available Courses</a></li>
         {% endif %}
         <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">Logout</a></li>
       </ul>

@@ -62,3 +62,28 @@ def reset_password(user_id):
     db.session.commit()
     flash("Password updated.")
     return redirect(url_for("admin.users"))
+
+@admin_bp.route("/courses")
+@login_required
+def all_courses():
+    if not current_user.is_admin():
+        flash("Access denied.")
+        return redirect(url_for("main.index"))
+
+    from app.models import Course
+    courses = Course.query.all()
+    return render_template("admin/courses.html", courses=courses)
+
+@admin_bp.route("/courses/<int:course_id>/delete", methods=["POST"])
+@login_required
+def delete_course(course_id):
+    if not current_user.is_admin():
+        flash("Access denied.")
+        return redirect(url_for("main.index"))
+
+    from app.models import Course
+    course = Course.query.get_or_404(course_id)
+    db.session.delete(course)
+    db.session.commit()
+    flash("Course deleted.")
+    return redirect(url_for("admin.all_courses"))
