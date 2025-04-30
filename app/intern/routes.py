@@ -74,6 +74,7 @@ def course_quiz(course_id):
         flash("Quiz is not properly formatted.")
         return redirect(url_for("intern.course_detail", course_id=course.id))
 
+    results = []
     if request.method == "POST":
         score = 0
         for i, q in enumerate(questions):
@@ -81,12 +82,21 @@ def course_quiz(course_id):
             correct = q["answer"]
             if isinstance(correct, str):
                 correct = [correct]
-            if sorted(selected) == sorted(correct):
+
+            is_correct = sorted(selected) == sorted(correct)
+            if is_correct:
                 score += 1
+            results.append({
+                "question": q["question"],
+                "selected": selected,
+                "correct": correct,
+                "is_correct": is_correct
+            })
+
         progress.quiz_passed = True
         db.session.commit()
-        flash(f"Вы ответили правильно на {score} из {len(questions)} вопросов.")
-        return redirect(url_for("intern.course_detail", course_id=course.id))
+        return render_template("intern/quiz_result.html", course=course, results=results, score=score, total=len(questions))
 
     return render_template("intern/quiz.html", course=course, questions=questions)
+
 

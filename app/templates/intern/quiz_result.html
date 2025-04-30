@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Quiz Results{% endblock %}
+{% block content %}
+<h2>{{ course.title }} — Results</h2>
+<p class="lead">You answered correctly on {{ score }} of {{ total }} questions.</p>
+<hr>
+{% for r in results %}
+  <div class="mb-3">
+    <strong>{{ loop.index }}. {{ r.question }}</strong><br>
+    <ul>
+      {% for option in r.correct %}
+        <li>
+          ✅ Correct: {{ option }}
+        </li>
+      {% endfor %}
+      {% for sel in r.selected %}
+        {% if sel not in r.correct %}
+          <li class="text-danger">❌ Your choice: {{ sel }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% if r.is_correct %}
+      <div class="alert alert-success">Correct</div>
+    {% else %}
+      <div class="alert alert-danger">Incorrect</div>
+    {% endif %}
+  </div>
+  <hr>
+{% endfor %}
+<a href="{{ url_for('intern.course_detail', course_id=course.id) }}" class="btn btn-secondary">Back to Course</a>
+{% endblock %}
