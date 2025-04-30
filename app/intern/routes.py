@@ -77,12 +77,13 @@ def course_quiz(course_id):
     if request.method == "POST":
         score = 0
         for i, q in enumerate(questions):
-            answer = request.form.get(f"q{i}")
-            if answer == q["answer"]:
+            selected = request.form.getlist(f"q{i}")
+            correct = q["answer"]
+            if sorted(selected) == sorted(correct):
                 score += 1
         progress.quiz_passed = True
         db.session.commit()
-        flash(f"You answered {score} out of {len(questions)} correctly.")
+        flash(f"Вы ответили правильно на {score} из {len(questions)} вопросов.")
         return redirect(url_for("intern.course_detail", course_id=course.id))
 
     return render_template("intern/quiz.html", course=course, questions=questions)

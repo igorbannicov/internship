@@ -3,17 +3,17 @@
 {% block content %}
 <h2>{{ course.title }} — Quiz</h2>
 <form method="post">
-  {% for q in questions %}
-    <div class="mb-3">
-      <label><strong>{{ loop.index }}. {{ q.question }}</strong></label><br>
-      {% for option in q.options %}
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="q{{ loop.index0 }}" value="{{ option }}" required>
-          <label class="form-check-label">{{ option }}</label>
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
+    {% for q in questions %}
+      <div class="mb-3">
+        <label><strong>{{ loop.index }}. {{ q.question }}</strong></label><br>
+        {% for option in q.options %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="q{{ loop.index0 }}" value="{{ option }}">
+            <label class="form-check-label">{{ option }}</label>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
   <button class="btn btn-success">Submit Answers</button>
 </form>
 {% endblock %}
