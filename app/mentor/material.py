@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app import db
 from app.models import Course, CoursePresentation, CourseNotes, CourseQuiz, CourseHomework
+import os
+from werkzeug.utils import secure_filename
 
 material_bp = Blueprint("material", __name__, url_prefix="/mentor/course/<int:course_id>")
 
@@ -56,3 +58,54 @@ def presentation(course_id):
             return redirect(url_for("mentor.courses"))
         flash("No file selected.")
     return render_template("mentor/upload_presentation.html", file=presentation.filename if presentation.filename else None)
+
+@material_bp.route("/notes", methods=["GET", "POST"])
+@login_required
+def notes(course_id):
+    course = check_course_owner(course_id)
+    if not course:
+        return redirect(url_for("main.index"))
+
+    notes = course.notes or CourseNotes(course_id=course.id, content="")
+    if request.method == "POST":
+        notes.content = request.form["content"]
+        db.session.add(notes)
+        db.session.commit()
+        flash("Notes saved.")
+        return redirect(url_for("mentor.courses"))
+
+    return render_template("mentor/material_form.html", title="Edit Notes", material=notes.content)
+
+@material_bp.route("/quiz", methods=["GET", "POST"])
+@login_required
+def quiz(course_id):
+    course = check_course_owner(course_id)
+    if not course:
+        return redirect(url_for("main.index"))
+
+    quiz = course.quiz or CourseQuiz(course_id=course.id, questions="")
+    if request.method == "POST":
+        quiz.questions = request.form["content"]
+        db.session.add(quiz)
+        db.session.commit()
+        flash("Quiz saved.")
+        return redirect(url_for("mentor.courses"))
+
+    return render_template("mentor/material_form.html", title="Edit Quiz (JSON)", material=quiz.questions)
+
+@material_bp.route("/homework", methods=["GET", "POST"])
+@login_required
+def homework(course_id):
+    course = check_course_owner(course_id)
+    if not course:
+        return redirect(url_for("main.index"))
+
+    hw = course.homework or CourseHomework(course_id=course.id, instructions="")
+    if request.method == "POST":
+        hw.instructions = request.form["content"]
+        db.session.add(hw)
+        db.session.commit()
+        flash("Homework saved.")
+        return redirect(url_for("mentor.courses"))
+
+    return render_template("mentor/material_form.html", title="Edit Homework", material=hw.instructions)
