@@ -1,6 +1,8 @@
+# coding=utf-8
+
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, current_user
-from app import db, bcrypt
+from app import db
 from app.models import User
 from app import login
 from flask_login import login_required

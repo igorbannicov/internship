@@ -1,3 +1,4 @@
+# coding=utf-8
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
@@ -26,7 +27,7 @@ def presentation(course_id):
     if not course:
         return redirect(url_for("main.index"))
 
-    presentation = course.presentation or CoursePresentation(course_id=course.id, filename="")
+    my_presentation = course.presentation or CoursePresentation(course_id=course.id, filename="")
     if request.method == "POST":
         file = request.files.get("file")
         if file and file.filename:
@@ -42,22 +43,22 @@ def presentation(course_id):
             if ext == ".pptx":
                 pdf_filename = convert_pptx_to_pdf(source_path, upload_folder)
                 if pdf_filename:
-                    presentation.filename = pdf_filename
+                    my_presentation.filename = pdf_filename
                 else:
                     flash("PowerPoint conversion failed.")
-                    return redirect(url_for("material.presentation", course_id=course.id))
+                    return redirect(url_for("material.pres", course_id=course.id))
             elif ext == ".pdf":
-                presentation.filename = filename
+                my_presentation.filename = filename
             else:
                 flash("Only PDF or PPTX supported.")
-                return redirect(url_for("material.presentation", course_id=course.id))
+                return redirect(url_for("material.pres", course_id=course.id))
 
-            db.session.add(presentation)
+            db.session.add(my_presentation)
             db.session.commit()
             flash("Presentation uploaded.")
             return redirect(url_for("mentor.courses"))
         flash("No file selected.")
-    return render_template("mentor/upload_presentation.html", file=presentation.filename if presentation.filename else None)
+    return render_template("mentor/upload_presentation.html", file=my_presentation.filename if my_presentation.filename else None)
 
 @material_bp.route("/notes", methods=["GET", "POST"])
 @login_required
@@ -66,15 +67,15 @@ def notes(course_id):
     if not course:
         return redirect(url_for("main.index"))
 
-    notes = course.notes or CourseNotes(course_id=course.id, content="")
+    my_notes = course.notes or CourseNotes(course_id=course.id, content="")
     if request.method == "POST":
-        notes.content = request.form["content"]
-        db.session.add(notes)
+        my_notes.content = request.form["content"]
+        db.session.add(my_notes)
         db.session.commit()
         flash("Notes saved.")
         return redirect(url_for("mentor.courses"))
 
-    return render_template("mentor/material_form.html", title="Edit Notes", material=notes.content)
+    return render_template("mentor/material_form.html", title="Edit Notes", material=my_notes.content)
 
 @material_bp.route("/quiz", methods=["GET", "POST"])
 @login_required
@@ -83,15 +84,15 @@ def quiz(course_id):
     if not course:
         return redirect(url_for("main.index"))
 
-    quiz = course.quiz or CourseQuiz(course_id=course.id, questions="")
+    my_quiz = course.quiz or CourseQuiz(course_id=course.id, questions="")
     if request.method == "POST":
-        quiz.questions = request.form["content"]
-        db.session.add(quiz)
+        my_quiz.questions = request.form["content"]
+        db.session.add(my_quiz)
         db.session.commit()
         flash("Quiz saved.")
         return redirect(url_for("mentor.courses"))
 
-    return render_template("mentor/material_form.html", title="Edit Quiz (JSON)", material=quiz.questions)
+    return render_template("mentor/material_form.html", title="Edit Quiz (JSON)", material=my_quiz.questions)
 
 @material_bp.route("/homework", methods=["GET", "POST"])
 @login_required
@@ -118,13 +119,12 @@ def quiz_builder(course_id):
     if not course:
         return redirect(url_for("main.index"))
 
-    quiz = course.quiz or CourseQuiz(course_id=course.id, questions="[]")
+    my_quiz = course.quiz or CourseQuiz(course_id=course.id, questions="[]")
 
     if request.method == "POST":
-        import json
         quiz_json = request.form["quiz_json"]
-        quiz.questions = quiz_json
-        db.session.add(quiz)
+        my_quiz.questions = quiz_json
+        db.session.add(my_quiz)
         db.session.commit()
         flash("Quiz saved.")
         return redirect(url_for("mentor.courses"))

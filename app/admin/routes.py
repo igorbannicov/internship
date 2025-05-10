@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import db
@@ -12,8 +14,8 @@ def users():
         flash("Access denied.")
         return redirect(url_for("main.index"))
 
-    users = User.query.all()
-    return render_template("admin/users.html", users=users)
+    my_users = User.query.all()
+    return render_template("admin/users.html", users=my_users)
 
 @admin_bp.route("/users/<int:user_id>/delete", methods=["POST"])
 @login_required

@@ -1,3 +1,4 @@
+# coding=utf-8
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app import db
@@ -12,8 +13,8 @@ def courses():
         flash("Access denied.")
         return redirect(url_for("main.index"))
 
-    courses = Course.query.filter_by(mentor_id=current_user.id).all()
-    return render_template("mentor/courses.html", courses=courses)
+    my_courses = Course.query.filter_by(mentor_id=current_user.id).all()
+    return render_template("mentor/courses.html", courses=my_courses)
 
 @mentor_bp.route("/courses/create", methods=["GET", "POST"])
 @login_required

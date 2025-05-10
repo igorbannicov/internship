@@ -1,10 +1,12 @@
+# coding=utf-8
 
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, flash, send_from_directory
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app import db
-from app.models import Course, CoursePresentation, CourseNotes, CourseQuiz, CourseHomework, CourseProgress
+from app.models import Course, CourseProgress
 from werkzeug.utils import secure_filename
+import json
 
 intern_bp = Blueprint("intern", __name__, url_prefix="/intern")
 
@@ -18,8 +20,8 @@ def courses():
         flash("Access denied.")
         return redirect(url_for("main.index"))
 
-    courses = Course.query.all()
-    return render_template("intern/courses.html", courses=courses)
+    my_courses = Course.query.all()
+    return render_template("intern/courses.html", courses=my_courses)
 
 @intern_bp.route("/course/<int:course_id>", methods=["GET", "POST"])
 @login_required
@@ -57,8 +59,6 @@ def course_detail(course_id):
 @intern_bp.route("/course/<int:course_id>/quiz", methods=["GET", "POST"])
 @login_required
 def course_quiz(course_id):
-    from flask import jsonify
-    import json
     from app.models import QuizResult
 
     course = Course.query.get_or_404(course_id)
@@ -71,8 +71,10 @@ def course_quiz(course_id):
 
     try:
         questions = json.loads(course.quiz.questions)
-    except Exception:
+    except Exception as e:
+        print(e)
         return "Quiz format error", 400
+
 
     if request.method == "POST":
         data = request.get_json()
