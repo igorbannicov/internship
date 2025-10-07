@@ -19,6 +19,9 @@ def create_app():
     login.init_app(app)
     bcrypt.init_app(app)
 
+    login.login_view = 'auth.login'
+    login.login_message = "Please, authorize first."
+
     from app.auth.routes import auth_bp
     from app.main.routes import main_bp
     from app.admin.routes import admin_bp

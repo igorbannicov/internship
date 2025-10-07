@@ -1,0 +1,33 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+.main {
+    flex: 1;
+    padding: 2rem;
+}
+
+pre {
+    white-space: pre-wrap;      /* Wrap text */
+    word-wrap: break-word;      /* Break long words */
+    overflow-wrap: break-word;  /* Ensures wrapping */
+}
+
+.nb {
+    padding: 0;
+    margin: 0;
+    margin-left: 2px;
+}

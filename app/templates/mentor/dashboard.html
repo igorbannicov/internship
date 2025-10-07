@@ -25,11 +25,18 @@
   {% endfor %}
 </ul>
 
-<h4 class="mt-4">Charts</h4>
-<canvas id="quizChart" height="150"></canvas>
-<canvas id="hwChart" height="150" class="mt-4"></canvas>
+<div class="row align-items-start">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="col">
+    <h5 class="mt-5">Quiz passed</h5>
+    <canvas id="quizChart" height="150"></canvas>
+  </div>
+  <div class="col">
+    <h5 class="mt-5">Homework submission</h5>
+    <canvas id="hwChart" height="150" class="mt-4"></canvas>
+  </div>
+</div>
+<script src="/static/js/chart.js"></script>
 <script>
 const ctx1 = document.getElementById('quizChart').getContext('2d');
 new Chart(ctx1, {

@@ -46,12 +46,12 @@ def presentation(course_id):
                     my_presentation.filename = pdf_filename
                 else:
                     flash("PowerPoint conversion failed.")
-                    return redirect(url_for("material.pres", course_id=course.id))
+                    return redirect(url_for("material.presentation", course_id=course.id))
             elif ext == ".pdf":
                 my_presentation.filename = filename
             else:
                 flash("Only PDF or PPTX supported.")
-                return redirect(url_for("material.pres", course_id=course.id))
+                return redirect(url_for("material.presentation", course_id=course.id))
 
             db.session.add(my_presentation)
             db.session.commit()

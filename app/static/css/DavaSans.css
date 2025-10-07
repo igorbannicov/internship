@@ -1,0 +1,63 @@
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-Light.otf) format('otf');
+	font-weight: 300;
+	font-style: normal;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-LightItalic.otf) format('otf');
+	font-weight: 300;
+	font-style: italic;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-Regular.otf) format('otf');
+	font-weight: 400;
+	font-style: normal;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-Italic.otf) format('otf');
+	font-weight: 400;
+	font-style: italic;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-Medium.otf) format('otf');
+	font-weight: 500;
+	font-style: normal;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-MediumItalic.otf) format('otf');
+	font-weight: 500;
+	font-style: italic;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-Bold.otf) format('otf');
+	font-weight: 700;
+	font-style: normal;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'DavaSans';
+	src: url(../fonts/DavaSans-BoldItalic.otf) format('otf');
+	font-weight: 700;
+	font-style: italic;
+	font-display: auto;
+}

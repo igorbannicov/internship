@@ -14,11 +14,11 @@
       <td>{{ course.description or '' }}</td>
       <td>{{ course.created_at.strftime('%Y-%m-%d') }}</td>
       <td>
-        <a href="{{ url_for('material.presentation', course_id=course.id) }}">Presentation</a> |
-        <a href="{{ url_for('material.notes', course_id=course.id) }}">Notes</a> |
-        <a href="{{ url_for('material.quiz_builder', course_id=course.id) }}">Quiz</a> |
-        <a href="{{ url_for('material.homework', course_id=course.id) }}">Homework</a> |
-        <a href="{{ url_for('mentor.course_dashboard', course_id=course.id) }}">Dashboard</a>
+        <a href="{{ url_for('material.presentation', course_id=course.id) }}"> <i class="bi bi-play-btn"></i> Presentation</a> |
+        <a href="{{ url_for('material.notes', course_id=course.id) }}"> <i class="bi bi-body-text"></i> Notes</a> |
+        <a href="{{ url_for('material.quiz_builder', course_id=course.id) }}"> <i class="bi bi-patch-question"></i> Quiz</a> |
+        <a href="{{ url_for('material.homework', course_id=course.id) }}"> <i class="bi bi-pen"></i> Homework</a> |
+        <a href="{{ url_for('mentor.course_dashboard', course_id=course.id) }}"> <i class="bi bi-bar-chart"></i> Dashboard</a>
       </td>
     </tr>
     {% endfor %}

@@ -1,0 +1,161 @@
+:root {
+  --bs-primary: rgb(25, 43, 55);
+  --bs-secondary: rgb(140, 149, 155);
+  --bs-success: rgb(45, 156, 91);
+  --bs-danger: rgb(212, 64, 59);
+  --bs-warning: rgb(235, 148, 16);
+  --bs-info: rgb(88, 153, 196);
+  --bs-light: rgb(232, 234, 235);
+  --bs-dark: #bc6767;
+}
+
+body {
+  font-family: DavaSans, sans-serif;
+  color: #111f2c;
+  background: rgb(255,255,255);
+  font-size: 14px;--bs-body-color: #1a2632;
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+#page_subtitle {
+  margin-left: 15px;
+  text-align: left;
+  height: 70px;
+  vertical-align: middle;
+  text-decoration: none;
+  color: rgb(255, 86, 64);
+  font-size: large;
+}
+
+.svgicon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.lgrey {
+  background-color: rgb(232, 234, 235);
+}
+
+.sidebar {
+  padding: 1rem;
+}
+
+.sidebar .list-group {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .list-group-item {
+  flex-shrink: 0;
+}
+
+.clean-border-list {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.clean-border-list .list-group-item {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.clean-border-list .list-group-item:not(:last-child) {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.clean-border-list .list-group-item:last-child {
+  border-bottom: none;
+}
+
+.clean-border-list-lgrey {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.clean-border-list-lgrey .list-group-item {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+}
+
+a:hover span {
+  color: rgb(88, 153, 196) !important;
+  border-bottom: 1px solid rgb(88, 153, 196);
+  text-underline-offset: 3px; 
+}
+
+a:hover .svgicon {
+  color: rgb(88, 153, 196) !important;
+  text-decoration: none;
+}
+
+.clean-border-list-lgrey .list-group-item:not(:last-child) {
+  border-bottom: 1px solid rgb(255,255,255);
+}
+
+.clean-border-list-lgrey .list-group-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-button {
+  background-color: white !important;
+  color: rgb(25, 43, 55) !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+.accordion-button:focus {
+  background-color: white !important;
+  color: rgb(25, 43, 55) !important;
+  border: 0;
+  box-shadow: none;
+}
+
+.accordion-button:hover {
+  color: rgb(88, 153, 196) !important;
+}
+
+
+.list-group {
+  --bs-list-group-color: inherit;
+}
+
+.navitem {
+  padding-left: 5px;
+}
+
+.col {
+  margin: 0;
+  padding: 0;
+}
+
+.mleft {
+  margin-left: 20px !important;
+}
+
+.current {
+  color: rgb(255, 86, 64);
+}
+
+footer {
+  background-color: rgb(232, 234, 235);
+  text-align: center;
+  display: inline;
+  margin-top: auto;
+}

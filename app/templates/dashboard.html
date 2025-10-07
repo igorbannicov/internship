@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<h2>Welcome, {{ current_user.name }}!</h2>
-
 {% if current_user.is_admin() %}
   <div class="alert alert-primary">You are logged in as <strong>Admin</strong>.</div>
   <ul>
-    <li><a href="{{ url_for('auth.register') }}">Register New User</a></li>
     <!-- Future: Manage mentors/interns -->
   </ul>
 {% elif current_user.is_mentor() %}
@@ -16,6 +13,4 @@
   <div class="alert alert-info">You are logged in as <strong>Intern</strong>.</div>
   <p>Your assigned courses and progress will be displayed here.</p>
 {% endif %}
-
-<a href="{{ url_for('auth.logout') }}" class="btn btn-secondary mt-3">Logout</a>
 {% endblock %}
